@@ -34,7 +34,7 @@ class Drone(models.Model):
     battery_capacity = models.PositiveIntegerField(
         validators=[MaxValueValidator(100), MinValueValidator(0)],
         default=100,
-        help_text=''
+        help_text="Battery's current capacity. Ranges from 0% to 100%"
     )
 
     DRONE_STATE = [
@@ -52,4 +52,5 @@ class Drone(models.Model):
         help_text='statof the dronr'
     )
 
-    
+    def __str__(self):
+        return f"{self.serial_number} {self.drone_model} - capacity: {self.weight_limit}"
