@@ -1,3 +1,4 @@
+from tkinter import CASCADE
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.db.utils import OperationalError
@@ -86,3 +87,12 @@ class Medication(models.Model):
 
     def __str__(self) -> str:
         return f"{self.name} {self.code} - capacity: {self.weight}"
+
+
+class LoadInformation(models.Model):
+
+    drone = models.ForeignKey('Drone', on_delete=models.CASCADE)
+    medication = models.ForeignKey('Medication', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)]
+    )
