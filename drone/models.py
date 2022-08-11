@@ -1,7 +1,4 @@
 from django.db import models
-from django.db.models.signals import pre_save
-from django.db.utils import OperationalError
-from django.dispatch import receiver
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
