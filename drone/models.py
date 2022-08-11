@@ -96,3 +96,6 @@ class LoadInformation(models.Model):
     quantity = models.PositiveIntegerField(
         validators=[MinValueValidator(1)]
     )
+
+    def __str__(self) -> str:
+        return f"Drone: {self.drone}, Medication: {self.medication}, Quantity: {self.quantity}"

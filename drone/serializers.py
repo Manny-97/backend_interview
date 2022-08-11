@@ -1,5 +1,6 @@
+from pyexpat import model
 from rest_framework import serializers
-from .models import Drone, Medication
+from .models import Drone, LoadInformation, Medication
 from .utils import validate_size
 
 class DroneSerializer(serializers.ModelSerializer):
@@ -50,4 +51,16 @@ class MedicationSerializer(serializers.HyperlinkedModelSerializer):
             'weight',
             'code',
             'image'
+        ]
+
+
+class LoadInformationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LoadInformation
+        fields = [
+            'id',
+            'drone',
+            'medication',
+            'quantity'
         ]
