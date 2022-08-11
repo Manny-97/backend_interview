@@ -1,5 +1,9 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
+from django.db.utils import OperationalError
+from .utils import validate_size
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 # Create your models here.
 class Drone(models.Model):
@@ -20,6 +24,7 @@ class Drone(models.Model):
     drone_model = models.CharField(
         choices=DRONE_MODEL,
         max_length=100,
+        default='Lightweight',
         help_text="model of the drone"
     )
     weight_limit = models.DecimalField(
@@ -51,6 +56,10 @@ class Drone(models.Model):
 
     def __str__(self):
         return f"{self.serial_number} {self.drone_model} - capacity: {self.weight_limit}"
+
+@receiver(pre_save, sender=Drone)   
+def drone_validator(sender, instance, *args, **kwargs):
+    validate_size(Drone, OperationalError)
 
 
 class Medication(models.Model):

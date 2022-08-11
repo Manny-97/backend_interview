@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Drone, Medication
+from .utils import validate_size
 
 class DroneSerializer(serializers.HyperlinkedModelSerializer):
 
@@ -12,9 +13,11 @@ class DroneSerializer(serializers.HyperlinkedModelSerializer):
             'drone_model',
             'weight_limit',
             'battery_capacity',
-            'state',
-            'medications'
+            'state'
         ]
+    def validate(self, data):
+        validate_size(Drone, serializers.ValidationError)
+        return data
 
 
 class MedicationSerializer(serializers.HyperlinkedModelSerializer):
