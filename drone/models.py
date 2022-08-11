@@ -7,7 +7,13 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 class Drone(models.Model):
 
-    MODEL = [
+    serial_number = models.CharField(
+        max_length=100,
+        unique=True,
+        help_text='serial number of the drone'
+    )
+
+    DRONE_MODEL = [
         ('Lightweight', 'heightweight'), 
         ('Middleweight', 'middleweight'), 
         ('Cruiserweight', 'cruiserweight'), 
@@ -15,7 +21,7 @@ class Drone(models.Model):
     ]
 
     drone_model = models.CharField(
-        choices=MODEL,
+        choices=DRONE_MODEL,
         max_length=100,
         help_text="model of the drone"
     )
@@ -26,5 +32,24 @@ class Drone(models.Model):
         MinValueValidator(1, "The minimum weight to load a drone with is 1g")]
     )
     battery_capacity = models.PositiveIntegerField(
-        default=100
+        validators=[MaxValueValidator(100), MinValueValidator(0)],
+        default=100,
+        help_text=''
     )
+
+    DRONE_STATE = [
+        ('IDLE', 'idle'), 
+        ('LOADING', 'loading'), 
+        ('LOADED', 'loaded'), 
+        ('DELIVERING', 'delivering'), 
+        ('DELIVERED', 'delivered'), 
+        ('RETURNING', 'returning')
+        ]
+    state = models.CharField(
+        max_length=20,
+        choices=DRONE_STATE,
+        default='IDLE',
+        help_text='statof the dronr'
+    )
+
+    
