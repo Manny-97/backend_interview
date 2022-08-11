@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 
 # Create your models here.
 class Drone(models.Model):
@@ -51,3 +51,29 @@ class Drone(models.Model):
 
     def __str__(self):
         return f"{self.serial_number} {self.drone_model} - capacity: {self.weight_limit}"
+
+
+class Medication(models.Model):
+
+    name = models.CharField(
+        validators=[RegexValidator(r"^[a-zA-Z0-9-_]+$", "Allowed only letters, numbers, -, _")],
+        max_length=150,
+        unique=True
+    )
+    weight = models.DecimalField(
+        validators=[MinValueValidator(1)],
+        max_digits=5,
+        decimal_places=2
+    )
+    code = models.CharField(
+        validators=[RegexValidator(r"^[A-Z0-9_]+$", "Allowed only upper case letters, underscore and numbers")],
+        max_length=150,
+        unique=True
+    )
+    image = models.ImageField(
+        upload_to='images/'
+
+    )
+
+    def __str__(self) -> str:
+        return f"{self.name} {self.code} - capacity: {self.weight}"
