@@ -1,4 +1,3 @@
-from tkinter import CASCADE
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.db.utils import OperationalError
@@ -7,6 +6,8 @@ from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 # Create your models here.
+
+
 class Drone(models.Model):
 
     serial_number = models.CharField(
@@ -16,9 +17,9 @@ class Drone(models.Model):
     )
 
     DRONE_MODEL = [
-        ('Lightweight', 'Leightweight'), 
-        ('Middleweight', 'Middleweight'), 
-        ('Cruiserweight', 'Cruiserweight'), 
+        ('Lightweight', 'Leightweight'),
+        ('Middleweight', 'Middleweight'),
+        ('Cruiserweight', 'Cruiserweight'),
         ('Heavyweight', 'Heavyweight')
     ]
 
@@ -29,10 +30,9 @@ class Drone(models.Model):
         help_text="model of the drone"
     )
     weight_limit = models.DecimalField(
-        max_digits=5, 
+        max_digits=5,
         decimal_places=2,
-        validators=[MaxValueValidator(500, "The maximum weight that can be carried is 500g"), 
-        MinValueValidator(1, "The minimum weight to load a drone with is 1g")],
+        validators=[MaxValueValidator(500, "The maximum weight that can be carried is 500g"), MinValueValidator(1, "The minimum weight to load a drone with is 1g")],
         help_text='weight of medication to be loaded in grammes'
     )
     battery_capacity = models.PositiveIntegerField(
@@ -42,11 +42,11 @@ class Drone(models.Model):
     )
 
     DRONE_STATE = [
-        ('IDLE', 'Idle'), 
-        ('LOADING', 'Loading'), 
-        ('LOADED', 'Loaded'), 
-        ('DELIVERING', 'Delivering'), 
-        ('DELIVERED', 'Delivered'), 
+        ('IDLE', 'Idle'),
+        ('LOADING', 'Loading'),
+        ('LOADED', 'Loaded'),
+        ('DELIVERING', 'Delivering'),
+        ('DELIVERED', 'Delivered'),
         ('RETURNING', 'Returning')
         ]
     state = models.CharField(
@@ -59,7 +59,8 @@ class Drone(models.Model):
     def __str__(self):
         return f"{self.serial_number} {self.drone_model} - capacity: {self.weight_limit}"
 
-@receiver(pre_save, sender=Drone)   
+
+@receiver(pre_save, sender=Drone)
 def drone_validator(sender, instance, *args, **kwargs):
     validate_size(Drone, OperationalError)
 

@@ -1,4 +1,3 @@
-from pyexpat import model
 from rest_framework import serializers
 from .models import Drone, LoadInformation, Medication
 from .utils import validate_size
@@ -14,6 +13,7 @@ class LoadInformationSerializer(serializers.ModelSerializer):
             'medication',
             'quantity'
         ]
+
 
 class DroneSerializer(serializers.ModelSerializer):
 
@@ -40,13 +40,11 @@ class DroneSerializer(serializers.ModelSerializer):
             weight_limit = valid_data['weight_limit'] if 'weight_limit' in valid_data else instance.weight_limit
             if weight_limit < sum_weight_medications:
                 raise serializers.ValidationError("Drone's capacity exceeded")
-            
         battery_capacity = valid_data['battery_capacity'] if 'battery_capacity' in valid_data else instance.battery_capacity
         state = valid_data['state'] if 'state' in valid_data else instance.state
 
         if battery_capacity < 25 and state == 'LOADING':
             raise serializers.ValidationError("Drone cannot be in loading state if battery level is below 25%")
-        
         super().update(instance=instance, validated_data=valid_data)
         return instance
 
@@ -63,6 +61,3 @@ class MedicationSerializer(serializers.HyperlinkedModelSerializer):
             'code',
             'image'
         ]
-
-
-
