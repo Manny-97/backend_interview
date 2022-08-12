@@ -16,10 +16,10 @@ class Drone(models.Model):
     )
 
     DRONE_MODEL = [
-        ('Lightweight', 'heightweight'), 
-        ('Middleweight', 'middleweight'), 
-        ('Cruiserweight', 'cruiserweight'), 
-        ('Heavyweight', 'heavyweight')
+        ('Lightweight', 'Leightweight'), 
+        ('Middleweight', 'Middleweight'), 
+        ('Cruiserweight', 'Cruiserweight'), 
+        ('Heavyweight', 'Heavyweight')
     ]
 
     drone_model = models.CharField(
@@ -32,7 +32,8 @@ class Drone(models.Model):
         max_digits=5, 
         decimal_places=2,
         validators=[MaxValueValidator(500, "The maximum weight that can be carried is 500g"), 
-        MinValueValidator(1, "The minimum weight to load a drone with is 1g")]
+        MinValueValidator(1, "The minimum weight to load a drone with is 1g")],
+        help_text='weight of medication to be loaded in grammes'
     )
     battery_capacity = models.PositiveIntegerField(
         validators=[MaxValueValidator(100), MinValueValidator(0)],
@@ -41,18 +42,18 @@ class Drone(models.Model):
     )
 
     DRONE_STATE = [
-        ('IDLE', 'idle'), 
-        ('LOADING', 'loading'), 
-        ('LOADED', 'loaded'), 
-        ('DELIVERING', 'delivering'), 
-        ('DELIVERED', 'delivered'), 
-        ('RETURNING', 'returning')
+        ('IDLE', 'Idle'), 
+        ('LOADING', 'Loading'), 
+        ('LOADED', 'Loaded'), 
+        ('DELIVERING', 'Delivering'), 
+        ('DELIVERED', 'Delivered'), 
+        ('RETURNING', 'Returning')
         ]
     state = models.CharField(
         max_length=20,
         choices=DRONE_STATE,
         default='IDLE',
-        help_text='statof the dronr'
+        help_text='state of the drone'
     )
 
     def __str__(self):
@@ -68,17 +69,20 @@ class Medication(models.Model):
     name = models.CharField(
         validators=[RegexValidator(r"^[a-zA-Z0-9-_]+$", "Allowed only letters, numbers, -, _")],
         max_length=150,
-        unique=True
+        unique=True,
+        help_text='name of medicine or medication'
     )
     weight = models.DecimalField(
         validators=[MinValueValidator(1)],
         max_digits=5,
-        decimal_places=2
+        decimal_places=2,
+        help_text='weight of medication in grammes'
     )
     code = models.CharField(
         validators=[RegexValidator(r"^[A-Z0-9_]+$", "Allowed only upper case letters, underscore and numbers")],
         max_length=150,
-        unique=True
+        unique=True,
+        help_text='code on the medication'
     )
     image = models.ImageField(
         upload_to='images/'
@@ -86,7 +90,7 @@ class Medication(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.name} {self.code} - capacity: {self.weight}"
+        return f"Medicine: {self.name}, Code: {self.code} - Capacity: {self.weight}"
 
 
 class LoadInformation(models.Model):

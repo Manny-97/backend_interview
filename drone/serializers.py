@@ -3,6 +3,18 @@ from rest_framework import serializers
 from .models import Drone, LoadInformation, Medication
 from .utils import validate_size
 
+
+class LoadInformationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LoadInformation
+        fields = [
+            'id',
+            'drone',
+            'medication',
+            'quantity'
+        ]
+
 class DroneSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -14,10 +26,9 @@ class DroneSerializer(serializers.ModelSerializer):
             'drone_model',
             'weight_limit',
             'battery_capacity',
-            'state',
-            'medications'
+            'state'
         ]
-    medications = serializers.PrimaryKeyRelatedField(queryset=Medication.objects.all(), required=False, many=True)
+
     def validate(self, data):
         validate_size(Drone, serializers.ValidationError)
         return data
@@ -54,13 +65,4 @@ class MedicationSerializer(serializers.HyperlinkedModelSerializer):
         ]
 
 
-class LoadInformationSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = LoadInformation
-        fields = [
-            'id',
-            'drone',
-            'medication',
-            'quantity'
-        ]
