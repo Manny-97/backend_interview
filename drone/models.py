@@ -17,7 +17,7 @@ class Drone(models.Model):
     )
 
     DRONE_MODEL = [
-        ('Lightweight', 'Leightweight'),
+        ('Lightweight', 'Lightweight'),
         ('Middleweight', 'Middleweight'),
         ('Cruiserweight', 'Cruiserweight'),
         ('Heavyweight', 'Heavyweight')
