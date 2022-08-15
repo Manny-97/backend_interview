@@ -5,6 +5,8 @@ from .serializers import DroneSerializer, MedicationSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from drone import serializers
+
 # Create your views here.
 
 
@@ -27,18 +29,20 @@ class DroneViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_name='battery')
     def battery(self, requst, *args, **kwargs):
         """ """
-        drone = self.get_object()
+        drone: Drone = self.get_object()
         if not drone:
             raise Http404
         serializer = self.get_serializer(drone)
         response_data = {
             'battery_capacity': f"{serializer.data['battery_capacity']}%"
         }
-        return response_data
+        return Response(response_data)
+
 
 
 class MedicationViewSet(viewsets.ModelViewSet):
     """API endpoint for the medication"""
+    allowed_methods = ['get', 'post']
     queryset = Medication.objects.all()
     serializer_class = MedicationSerializer
     # permission_classes = [permissions.IsAuthenticated]
