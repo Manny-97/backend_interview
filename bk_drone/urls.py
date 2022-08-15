@@ -23,8 +23,8 @@ schema_view = get_swagger_view(title='Assignment')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('drone.urls')),
     path('apidocs/', schema_view),
+    path('api/', include('drone.urls')),
 ]
 
 if settings.DEBUG:
