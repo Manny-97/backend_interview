@@ -55,9 +55,12 @@ class Drone(models.Model):
         default='IDLE',
         help_text='state of the drone'
     )
+    @property
+    def load_info(self):
+        return LoadInformation.objects.filter(drone__pk=self.pk)
 
     def __str__(self):
-        return f"{self.serial_number} {self.drone_model} - capacity: {self.weight_limit}"
+        return f"{self.serial_number}/{self.model} - cap: {self.weight_limit}"
 
 
 @receiver(pre_save, sender=Drone)
@@ -91,7 +94,7 @@ class Medication(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"Medicine: {self.name}, Code: {self.code} - Capacity: {self.weight}"
+        return f"{self.name}/{self.code} - cap: {self.weight}"
 
 
 class LoadInformation(models.Model):
@@ -103,4 +106,4 @@ class LoadInformation(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"Drone: {self.drone}, Medication: {self.medication}, Quantity: {self.quantity}"
+        return f"Drone: {self.drone.pk}, Medication: {self.medication.pk}, Quantity: {self.quantity}"
